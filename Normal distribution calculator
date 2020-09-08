@@ -1,0 +1,70 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <math.h>
+
+int main()
+{
+    srand(time(0));
+
+    printf("Numerical calculator for definite integrals of the normal distribution.\n\n");
+
+    float mean;
+    float variance; //distribution parameters
+    float a; //integral lower bound
+    float b; //integral upper bound
+
+    printf("Enter mean\t");
+    scanf(" %f", &mean);
+    printf("Enter variance\t");
+    scanf(" %f", &variance);
+
+    printf("\n====================\n\n");
+
+    printf("Integral from:\t");
+    scanf(" %f", &a);
+    printf("To:           \t");
+    scanf(" %f", &b);
+
+    a=(a-mean)/sqrt(variance);
+    b=(b-mean)/sqrt(variance); //standardization
+
+    printf("\n====================\n\n");
+
+    printf("Computing"); //Just so that the user can look at something while waiting
+
+    int totalpoints=0; //total random points generated
+    int minorpoints=0; //random points under the curve
+
+    int j=0;
+    int howmanypoints=10000000; //how many random points do you want to generate?
+    int progressdots=25; //these dots will show the progress (next to the word "Computing"). Cool feature.
+
+    while(j<progressdots){
+        int i=0;
+            while(i<howmanypoints/progressdots){
+                int randintx=rand();
+                float x=(((float)randintx/32767)*(b-a))+a;
+                float fvalue=(pow(M_E,(-((pow(x,2))/2))))/sqrt(2*M_PI); // <---- here is the function to be integrated
+                int randinty=rand();
+                float randfloaty=((float)randinty/32767)*0.4;
+                if (randfloaty<fvalue){
+                    minorpoints++;
+                }
+                totalpoints++;
+                i++;
+            }
+        printf("."); //<--- the "progress" dots.
+        j++;
+    }
+
+    float defint=((float)minorpoints/(float)totalpoints)*((b-a)*0.4);
+
+    printf("\n\nThe definite integral is %.4f", defint);
+
+    //the end
+    printf("\n\n====================\n\nAll credits to Pietro Ghiringhelli. 2/22/2017\n");
+    int endvar;
+    scanf(" %d", &endvar);
+
+    return 0;
+}
